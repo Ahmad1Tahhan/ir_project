@@ -20,8 +20,8 @@ Start-Svc "retrieval"     "services.retrieval_service"   8001
 Start-Svc "preprocessing" "services.preprocessing_service" 8002
 Start-Svc "refinement"    "services.refinement_service"  8003
 Start-Svc "evaluation"    "services.evaluation_service"  8004
-# RAG is optional (downloads a local LLM on first call); start it if you need chat:
-# Start-Svc "rag"         "services.rag_service"         8005
+# RAG service (loads a LOCAL LLM into GPU on first /chat call; model is cached offline):
+Start-Svc "rag"           "services.rag_service"         8005
 
 Start-Sleep -Seconds 4
 Start-Svc "gateway"       "services.gateway"             8000

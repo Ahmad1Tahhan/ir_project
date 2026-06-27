@@ -28,6 +28,14 @@ os.environ.setdefault("IR_DATASETS_HOME", str(IR_DATASETS_HOME))
 os.environ.setdefault("HF_HOME", str(MODELS_DIR / "hf"))
 os.environ.setdefault("SENTENCE_TRANSFORMERS_HOME", str(MODELS_DIR / "st"))
 
+# Force fully-offline model loading: never contact the HF Hub at load time (all
+# weights are already cached above). This removes the network round-trip + the
+# "unauthenticated requests to the HF Hub" warning, and guarantees the demo runs
+# with no internet (a hard requirement for the interview hall).
+# To (re-)download a new model, comment these out, run once online, then restore.
+os.environ.setdefault("HF_HUB_OFFLINE", "1")
+os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
+
 # --- Models ----------------------------------------------------------------
 # Small, fast, strong baseline; ~384-dim. Encodes 523K docs in minutes on a 4060.
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"

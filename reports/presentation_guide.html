@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دليل عرض مشروع نظام استرجاع المعلومات — لكل عضو خطوة بخطوة</title>
+<style>
+  :root{
+    --bg:#0f172a; --card:#1e293b; --card2:#273449; --ink:#e2e8f0; --muted:#94a3b8;
+    --accent:#38bdf8; --accent2:#a78bfa; --ok:#34d399; --warn:#fbbf24; --line:#334155;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:linear-gradient(180deg,#0b1220,#0f172a 30%); color:var(--ink);
+    font-family:"Segoe UI","Tahoma",Arial,sans-serif; line-height:1.85; font-size:16px;
+  }
+  .wrap{max-width:1040px; margin:0 auto; padding:32px 20px 80px}
+  header.hero{
+    text-align:center; padding:36px 20px; border-radius:18px;
+    background:radial-gradient(1200px 300px at 50% -50%,rgba(56,189,248,.25),transparent),
+               linear-gradient(135deg,#1e293b,#273449);
+    border:1px solid var(--line); margin-bottom:26px;
+  }
+  header.hero h1{margin:0 0 8px; font-size:30px}
+  header.hero p{margin:4px 0; color:var(--muted)}
+  .pill{display:inline-block; background:var(--card2); border:1px solid var(--line);
+        color:var(--accent); padding:4px 12px; border-radius:999px; font-size:13px; margin:4px}
+  h2.section{font-size:22px; margin:38px 0 14px; padding-bottom:8px; border-bottom:2px solid var(--line)}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px 22px; margin:14px 0;
+        box-shadow:0 6px 20px rgba(0,0,0,.25)}
+  .member{border-right:5px solid var(--accent)}
+  .member h3{margin:0 0 2px; font-size:21px; display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+  .member .role{color:var(--accent2); font-weight:600; font-size:15px}
+  .num{background:var(--accent); color:#06283d; width:30px; height:30px; border-radius:50%;
+       display:inline-flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex:0 0 auto}
+  .label{font-weight:700; color:var(--accent); margin:16px 0 6px; font-size:15px}
+  ol,ul{margin:6px 0; padding-inline-start:24px}
+  ol li,ul li{margin:10px 0}
+  .say{background:var(--card2); border-right:3px solid var(--ok); border-radius:8px; padding:10px 14px; color:#d1fae5; font-style:italic}
+  .how{display:block; margin-top:5px; background:rgba(167,139,250,.10); border-right:3px solid var(--accent2);
+       border-radius:6px; padding:7px 12px; color:#ddd6fe; font-size:14.5px}
+  .how b{color:#c4b5fd}
+  code,.cmd{font-family:"Consolas","Courier New",monospace; direction:ltr; unicode-bidi:embed; text-align:left}
+  code{background:#0b1220; border:1px solid var(--line); border-radius:5px; padding:1px 6px; color:#7dd3fc}
+  .cmd{display:block; background:#0b1220; border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin:6px 0; color:#7dd3fc; white-space:pre-wrap; overflow-x:auto}
+  .qa{border-top:1px dashed var(--line); margin-top:16px; padding-top:10px}
+  .q{color:var(--warn); font-weight:700}
+  .a{color:var(--ink)}
+  .toc{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px}
+  .toc a{display:block; background:var(--card2); border:1px solid var(--line); border-radius:10px;
+         padding:12px 14px; color:var(--ink); text-decoration:none; transition:.15s}
+  .toc a:hover{border-color:var(--accent); color:var(--accent)}
+  .toc a b{display:block; color:var(--accent)}
+  .note{background:rgba(251,191,36,.1); border:1px solid var(--warn); border-radius:10px; padding:12px 16px; color:#fde68a}
+  .ok{color:var(--ok); font-weight:700}
+  table{width:100%; border-collapse:collapse; margin:10px 0}
+  th,td{border:1px solid var(--line); padding:9px 12px; text-align:right}
+  th{background:var(--card2); color:var(--accent)}
+  footer{text-align:center; color:var(--muted); margin-top:40px; font-size:13px}
+  @media print{ body{background:#fff;color:#111} .card{box-shadow:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>🎤 دليل عرض المشروع — خطوة بخطوة لكل عضو</h1>
+    <p>نظام استرجاع المعلومات (Information Retrieval System) — 2026</p>
+    <p>الفريق: <b>5 أعضاء</b> • مجموعة البيانات: <b>BEIR / Quora</b> (522,931 وثيقة، 10,000 استعلام، مع qrels)</p>
+    <div>
+      <span class="pill">يُعرض كاملاً أوفلاين</span>
+      <span class="pill">Python حصراً</span>
+      <span class="pill">بنية SOA — 6 خدمات</span>
+      <span class="pill">تسريع GPU (4060)</span>
+    </div>
+  </header>
+
+  <div class="card note">
+    <b>⏱️ قبل بدء العرض (يقوم بها شخص واحد قبل دخول القاعة):</b>
+    <ol style="margin-bottom:0">
+      <li>افتح الطرفية في مجلد المشروع وفعّل البيئة:<span class="cmd">.\.venv\Scripts\Activate.ps1</span></li>
+      <li>شغّل كل الخدمات الستّ + الواجهة دفعة واحدة:<span class="cmd">.\scripts\start_all.ps1</span>
+        <span class="how">🔧 <b>كيف:</b> السكربت يشغّل كل خدمة بأمر <code>uvicorn services.&lt;name&gt;:app</code> على منفذها (8000–8005) في نافذة مستقلة، ثم يفتح Streamlit. هذا يبرهن مبدأ SOA: كل خدمة عملية مستقلة.</span></li>
+      <li>انتظر فتح الواجهة على <code>http://localhost:8501</code>، وتحقّق من صحّة الخدمات بفتح <code>http://127.0.0.1:8000/health</code> في المتصفح (يجب أن تكون كلها <span class="ok">ok</span>) و <code>http://127.0.0.1:8005/health</code> لخدمة RAG.</li>
+      <li><b>سخّن النماذج:</b> نفّذ استعلام بحث واحداً، ثم اسأل سؤالاً في تبويب RAG (أول استدعاء يحمّل نموذج اللغة على الـ GPU ويأخذ ~40 ثانية مرة واحدة فقط).</li>
+      <li>افتح نوتبوك التقييم <code>notebooks/evaluation.ipynb</code> في تبويب جاهز (النتائج محفوظة فيه مسبقاً).</li>
+    </ol>
+  </div>
+
+  <div class="card note" style="border-color:var(--accent); background:rgba(56,189,248,.08); color:#bae6fd">
+    <b>💡 طريقتان موحّدتان يستخدمهما الجميع لإثبات أن كل خدمة تعمل وحدها:</b>
+    <ul style="margin-bottom:0">
+      <li><b>صفحة التوثيق التفاعلية (الأسهل):</b> كل خدمة FastAPI تنشر واجهة Swagger تلقائياً على المسار <code>/docs</code>. افتح مثلاً <code>http://127.0.0.1:8002/docs</code> ← اختر الـ endpoint ← اضغط <i>Try it out</i> ← أدخل القيم ← <i>Execute</i>. هذا أنظف من curl ويُظهر الطلب والرد مباشرة.</li>
+      <li><b>المتصفح للـ GET، و PowerShell للـ POST:</b> روابط GET تُفتح بالمتصفح؛ وطلبات POST عبر:
+        <span class="cmd">Invoke-RestMethod -Uri http://127.0.0.1:8002/preprocess -Method Post -ContentType application/json -Body '{"text":"Running CATS!!"}'</span></li>
+    </ul>
+  </div>
+
+  <h2 class="section">🧭 ترتيب العرض (تسلسل الكلام بين الأعضاء)</h2>
+  <div class="card">
+    <p>اعرضوا بنفس ترتيب رحلة الاستعلام داخل النظام — فيصير العرض قصة متصلة:</p>
+    <div class="toc">
+      <a href="#m1"><b>1 — احمد الطحان</b>مقدمة + المعالجة المسبقة + بوابة API</a>
+      <a href="#m2"><b>2 — محمد دريد فاخوري</b>TF-IDF / BM25 + الفهرس + تحسين الاستعلام</a>
+      <a href="#m3"><b>3 — طارق المزيك</b>Embeddings + FAISS + الهجين</a>
+      <a href="#m4"><b>4 — ياسر جمال الدين</b>التقييم + الرسومات + النوتبوك</a>
+      <a href="#m5"><b>5 — معتز الحلاق</b>الميزات الإضافية + RAG + الواجهة</a>
+    </div>
+    <p class="how" style="margin-top:14px">🔧 <b>ملاحظة على الواجهة:</b> في الشريط الجانبي مفتاح <code>Backend</code> فيه خياران: <b>Direct</b> (افتراضي — يُحمّل المحرك داخل عملية الواجهة، يعمل أوفلاين بلا خدمات) و<b>Gateway (SOA)</b> (يستدعي الخدمات عبر البوابة). لإظهار بنية SOA بدّل إلى <b>Gateway (SOA)</b>؛ وعند أي مشكلة شبكة ارجع إلى <b>Direct</b>. تبويب RAG يستدعي خدمة RAG مباشرة في الوضعين.</p>
+  </div>
+
+  <!-- ================= MEMBER 1 ================= -->
+  <h2 class="section" id="m1">عضو 1 — احمد الطحان</h2>
+  <div class="card member">
+    <h3><span class="num">1</span> احمد الطحان</h3>
+    <div class="role">المسؤولية: المقدمة العامة + المعالجة المسبقة (Pre-Processing) + بوابة API (Gateway)</div>
+
+    <div class="label">🗣️ ماذا تقول (أنت من يفتح العرض)</div>
+    <div class="say">«مشروعنا محرك بحث متكامل مبني وفق مبدأ SOA بلغة Python فقط، يعمل على مجموعة Quora التي تحوي 522,931 وثيقة و10,000 استعلام مع ملف qrels للتقييم، ويعمل كاملاً بدون إنترنت. سأبدأ بالمعالجة المسبقة وهي أول خطوة في رحلة أي استعلام، ثم بوابة الـ API التي تربط الخدمات.»</div>
+
+    <div class="label">🖥️ خطوات العرض العملي</div>
+    <ol>
+      <li>افتح صفحة خدمة المعالجة: <code>http://127.0.0.1:8002/docs</code> ← endpoint <code>POST /preprocess</code> ← <i>Try it out</i>، وأدخل:
+        <span class="cmd">{ "text": "The Studying of Running CATS!! http://x.com", "normalizer": "lemmatize" }</span>
+        نفّذ وأظهر الخرج: <code>"tokens": ["studying","running","cat"]</code>.
+        <span class="how">🔧 <b>كيف نفّذناها</b> (في <code>preprocessing/text.py</code>): السلسلة هي تحويل لأحرف صغيرة ← إزالة الروابط والرموز غير ASCII بتعبير نمطي (Regex) ← تقطيع بتعبير نمطي يُبقي الفواصل العليا ← إسقاط الكلمات الأقصر من حرفين ← إزالة كلمات التوقف (قائمة NLTK) ← <b>Lemmatization</b> عبر WordNetLemmatizer. لذلك «CATS» تصبح «cat» و«Running» تبقى «running» وتُحذف «The/of».</span></li>
+      <li>غيّر <code>normalizer</code> إلى <code>"stem"</code> ثم <code>"none"</code> وأعد التنفيذ لتُظهر أن السلسلة قابلة للتبديل.
+        <span class="how">🔧 <b>كيف:</b> الإعداد <code>PreprocessConfig.normalizer</code> يختار بين WordNetLemmatizer و PorterStemmer أو بلا تطبيع — ويُحفظ مع المخرجات حتى يُعالَج الاستعلام وقت البحث بنفس الطريقة التي عُولجت بها الوثائق (شرط أساسي للتوافق).</span></li>
+      <li>انتقل لبوابة الـ API: افتح <code>http://127.0.0.1:8000/health</code> وأظهر أن الخدمات حالتها <span class="ok">ok</span>.
+        <span class="how">🔧 <b>كيف نفّذناها</b> (في <code>services/gateway.py</code>): البوابة تستعلم صحّة كل من retrieval/preprocessing/refinement/evaluation وتُرجِع حالتها مجمّعة. (خدمة RAG تُفحص مستقلة على <code>:8005/health</code> لأنها اختيارية وثقيلة.)</span></li>
+      <li>افتح <code>http://127.0.0.1:8000/docs</code> وأظهر مسارات البوابة (<code>/search</code>, <code>/preprocess</code>, <code>/refine</code>, <code>/report</code> ...).
+        <span class="how">🔧 <b>كيف:</b> البوابة لا تكرّر المنطق، بل <b>تمرّر</b> كل طلب عبر <code>requests</code> إلى الخدمة المناسبة (REST). هذا يحقّق <b>Loose Coupling</b>: الواجهة تكلّم عنواناً واحداً ولا تعرف أماكن الخدمات.</span></li>
+    </ol>
+
+    <div class="label">📄 ملفاتك</div>
+    <ul>
+      <li><code>src/irsys/preprocessing/text.py</code> — TextPreprocessor + PreprocessConfig</li>
+      <li><code>services/preprocessing_service.py</code> (منفذ 8002) · <code>services/gateway.py</code> (منفذ 8000)</li>
+    </ul>
+
+    <div class="qa">
+      <p><span class="q">س: لماذا Lemmatization وليس Stemming؟</span><br><span class="a">ج: الـ Lemmatization يُرجع جذراً صحيحاً لغوياً (cats→cat) فيحافظ على المعنى؛ جعلناه قابلاً للتبديل إلى Stemming الأسرع لإتاحة المقارنة.</span></p>
+      <p><span class="q">س: لماذا نفس السلسلة على الوثائق والاستعلام؟</span><br><span class="a">ج: حتى يكون تمثيل الاستعلام مقارَناً لتمثيل الوثائق؛ لذلك نحفظ إعدادات المعالجة مع المخرجات ونعيد تحميلها وقت البحث.</span></p>
+      <p><span class="q">س: ما فائدة بوابة الـ API؟</span><br><span class="a">ج: نقطة دخول موحّدة تُخفي عناوين الخدمات وتفصل الواجهة عنها؛ وكل خدمة تبقى قابلة للتشغيل والاختبار وحدها.</span></p>
+    </div>
+  </div>
+
+  <!-- ================= MEMBER 2 ================= -->
+  <h2 class="section" id="m2">عضو 2 — محمد دريد فاخوري</h2>
+  <div class="card member">
+    <h3><span class="num">2</span> محمد دريد فاخوري</h3>
+    <div class="role">المسؤولية: تمثيل TF-IDF و BM25 + الفهرس المعكوس + تحسين الاستعلام (Refinement)</div>
+
+    <div class="label">🗣️ ماذا تقول</div>
+    <div class="say">«بعد المعالجة نحتاج تمثيلاً رقمياً للوثائق. بنيتُ تمثيلين كلاسيكيين: VSM TF-IDF مع جيب التمام، و BM25 فوق فهرس معكوس صنعناه يدوياً — وميزته أننا نحسب الدرجة وقت الاستعلام فنستطيع تغيير معاملاته k1 و b حياً. كما أضفتُ خدمة تحسين الاستعلام.»</div>
+
+    <div class="label">🖥️ خطوات العرض العملي (في تبويب Search بالواجهة)</div>
+    <ol>
+      <li>اختر من قائمة <code>Representation / method</code> الخيار <b>TF-IDF (VSM)</b>، واكتب استعلاماً مثل <code>how do i learn python programming</code>، ونفّذ. أظهر النتائج <b>بالنص الأصلي + المُعرّف doc_id + الدرجة</b>.
+        <span class="how">🔧 <b>كيف نفّذناها</b> (<code>representation/tfidf.py</code>): نستخدم TfidfVectorizer من scikit-learn مع مُقطّع هوية (identity tokenizer) فوق الرموز المعالَجة مسبقاً، والمطابقة بجيب التمام (Cosine).</span></li>
+      <li>بدّل الطريقة إلى <b>BM25 (probabilistic)</b> ونفّذ نفس الاستعلام؛ قارن الترتيب.
+        <span class="how">🔧 <b>كيف نفّذناها</b> (<code>indexing/inverted_index.py</code>): بنينا فهرساً معكوساً يدوياً يخزّن قوائم الإحالة (postings) وترددات الكلمات بصيغة مصفوفات NumPy مضغوطة (CSR) لسرعة الوصول.</span></li>
+      <li><b>أهم عرض:</b> افتح قسم <code>Parameters</code>، وحرّك منزلقَي <code>BM25 k1</code> و<code>BM25 b</code> ثم أعد البحث — أظهر تغيّر الترتيب حياً.
+        <span class="how">🔧 <b>كيف:</b> درجة BM25 لا تُحسب مسبقاً بل <b>وقت الاستعلام</b> فوق الفهرس المعكوس بدلالة k1 و b، فيمكن تمرير قيم جديدة لكل بحث ومشاهدة الأثر مباشرة. القيم الافتراضية k1=1.5 و b=0.75.</span></li>
+      <li>فعّل صندوق <code>Show query refinement suggestions</code> واكتب استعلاماً فيه خطأ إملائي مثل <code>pyton programing language</code>، وأظهر التصحيح المقترح والاستعلام المُحسّن.
+        <span class="how">🔧 <b>كيف نفّذناها</b> (<code>refinement/query_refine.py</code>): <b>تصحيح إملائي</b> للكلمات خارج مفردات الفهرس بأقرب كلمة عبر مسافة التحرير (difflib بعتبة 0.85)، و<b>توسيع بالمرادفات</b> من WordNet، و<b>اقتراحات</b> من سجلّ استعلامات المجموعة نفسها.</span></li>
+      <li>(اختياري) اختبر الخدمة وحدها: <code>http://127.0.0.1:8003/docs</code> ← <code>POST /refine</code> بالجسم:
+        <span class="cmd">{ "dataset": "quora", "query": "pyton programing" }</span>
+        وأظهر الحقول <code>spelling_changes</code> و<code>refined_query</code>. ولاقتراحات الإكمال: <code>GET /suggest?prefix=how</code>.</li>
+    </ol>
+
+    <div class="label">📄 ملفاتك</div>
+    <ul>
+      <li><code>src/irsys/representation/tfidf.py</code> · <code>representation/bm25.py</code></li>
+      <li><code>src/irsys/indexing/inverted_index.py</code> — الفهرس المعكوس + حساب BM25 وقت الاستعلام</li>
+      <li><code>src/irsys/refinement/query_refine.py</code> · <code>services/refinement_service.py</code> (منفذ 8003)</li>
+    </ul>
+
+    <div class="qa">
+      <p><span class="q">س: ماذا يعني k1 و b؟</span><br><span class="a">ج: k1 يضبط تشبّع تكرار الكلمة (كم يفيد التكرار الإضافي)، و b يضبط تطبيع طول الوثيقة (0 = تجاهل الطول، 1 = تطبيع كامل).</span></p>
+      <p><span class="q">س: لماذا فهرس معكوس يدوي بدل مكتبة جاهزة؟</span><br><span class="a">ج: لتحقيق متطلب بناء الفهرسة بأنفسنا، ولأنه يتيح حساب الدرجة وقت الاستعلام وتغيير المعاملات حياً.</span></p>
+      <p><span class="q">س: هل التصحيح الإملائي يضمن إصلاح كل خطأ؟</span><br><span class="a">ج: لا؛ يصحّح فقط إن وُجدت كلمة في مفردات الفهرس قريبة بما يكفي (عتبة 0.85)، وإلا يُبقي الكلمة كما هي.</span></p>
+    </div>
+  </div>
+
+  <!-- ================= MEMBER 3 ================= -->
+  <h2 class="section" id="m3">عضو 3 — طارق المزيك</h2>
+  <div class="card member">
+    <h3><span class="num">3</span> طارق المزيك</h3>
+    <div class="role">المسؤولية: التمثيل الدلالي (Embeddings) + مخزن المتجهات FAISS + التمثيل الهجين + خدمة Retrieval</div>
+
+    <div class="label">🗣️ ماذا تقول</div>
+    <div class="say">«التمثيلات الكلاسيكية تطابق الكلمات حرفياً، لكن أسئلة Quora متشابهة دلالياً لا لفظياً. لذلك أضفتُ تمثيلاً دلالياً بنموذج all-MiniLM-L6-v2 يعمل على الـ GPU، نخزّن متجهاته في FAISS للبحث السريع، ثم نجمع الأفضل من العالمين بالتمثيل الهجين.»</div>
+
+    <div class="label">🖥️ خطوات العرض العملي (تبويب Search)</div>
+    <ol>
+      <li>اختر <b>Embeddings (semantic)</b> ونفّذ استعلاماً «دلالياً» لا تتطابق ألفاظه مع الجواب، مثل: <code>how can I earn money from home</code> — أظهر أنه يجد أسئلة عن الدخل عبر الإنترنت رغم اختلاف الكلمات.
+        <span class="how">🔧 <b>كيف نفّذناها</b> (<code>representation/embeddings.py</code>): نُرمّز كل وثيقة إلى متجه 384-بُعد بنموذج sentence-transformers على الـ GPU، ونطبّع المتجهات (L2) فيصبح الضرب الداخلي = جيب التمام.</span></li>
+      <li>اشرح مخزن المتجهات: نخزّن المتجهات في فهرس FAISS من نوع <code>IndexFlatIP</code> للبحث السريع على نصف مليون وثيقة.
+        <span class="how">🔧 <b>كيف نفّذناها</b> (<code>indexing/vector_store.py</code>): <code>IndexFlatIP</code> يبحث بالضرب الداخلي فوق متجهات مطبّعة، فيعطي أعلى الوثائق تشابهاً دلالياً مع الاستعلام.</span></li>
+      <li>اختر <b>Hybrid — Serial (BM25 → rerank)</b> ونفّذ، ثم <b>Hybrid — Parallel (fusion)</b> وقارن.
+        <span class="how">🔧 <b>كيف نفّذناها</b> (<code>retrieval/hybrid.py</code>): <b>التسلسلي</b> يأخذ مرشّحي BM25 (حجمهم = «Candidate pool») ثم يعيد ترتيبهم بجيب تمام الـ Embeddings — أدق وأرخص. <b>التفرّعي</b> يشغّل BM25 والـ Embeddings مستقلين ثم يدمج قائمتيهما.</span></li>
+      <li>في وضع Parallel غيّر <code>Parallel fusion</code> بين <b>rrf</b> و<b>weighted</b> وأعد البحث.
+        <span class="how">🔧 <b>كيف نفّذناها</b> (<code>retrieval/fusion.py</code>): <b>RRF</b> يدمج بجمع مقلوب الرُّتب <code>Σ 1/(60+rank)</code> فلا يحتاج معايرة درجات بين مقاييس مختلفة؛ و<b>Weighted</b> يطبّع درجات كل قائمة (min-max) ثم يجمعها بأوزان.</span></li>
+      <li>اذكر التسريع: ترميز كل الوثائق على 4060 يستغرق نحو دقيقة، وبناء كل المخرجات نحو 80 ثانية.</li>
+      <li>(اختياري) اختبر خدمتك وحدها: <code>http://127.0.0.1:8001/docs</code> ← <code>POST /search</code> بالجسم:
+        <span class="cmd">{ "dataset":"quora", "method":"embedding", "query":"learn python", "top_k":5 }</span>
+        وكذلك <code>GET /methods</code> لعرض الطرق المتاحة.</li>
+    </ol>
+
+    <div class="label">📄 ملفاتك</div>
+    <ul>
+      <li><code>src/irsys/representation/embeddings.py</code> — الترميز على GPU + إعادة الترتيب (rerank)</li>
+      <li><code>src/irsys/indexing/vector_store.py</code> — FAISS · <code>retrieval/hybrid.py</code> · <code>retrieval/fusion.py</code></li>
+      <li><code>services/retrieval_service.py</code> (منفذ 8001)</li>
+    </ul>
+
+    <div class="qa">
+      <p><span class="q">س: الفرق بين الهجين التسلسلي والتفرّعي؟</span><br><span class="a">ج: التسلسلي يعيد ترتيب مرشّحي BM25 فقط (أعلى دقة في القمة/nDCG)، والتفرّعي يدمج مرشّحي النموذجين (أعلى Recall لأنه يغطّي أكثر).</span></p>
+      <p><span class="q">س: لماذا تطبيع المتجهات قبل FAISS؟</span><br><span class="a">ج: لأن الضرب الداخلي على متجهات مطبّعة يساوي جيب التمام؛ فنستخدم IndexFlatIP لقياس التشابه الدلالي مباشرة.</span></p>
+      <p><span class="q">س: ما الـ Candidate pool؟</span><br><span class="a">ج: عدد المرشّحين الذين يولّدهم BM25 قبل إعادة الترتيب الدلالي في الوضع الهجين — كلّما زاد زاد الاستذكار مقابل بطء أكبر.</span></p>
+    </div>
+  </div>
+
+  <!-- ================= MEMBER 4 ================= -->
+  <h2 class="section" id="m4">عضو 4 — ياسر جمال الدين</h2>
+  <div class="card member">
+    <h3><span class="num">4</span> ياسر جمال الدين</h3>
+    <div class="role">المسؤولية: التقييم (Evaluation) + المقاييس والرسومات + النوتبوك + خدمة Evaluation</div>
+
+    <div class="label">🗣️ ماذا تقول (هذا أهم جزء عند الدكتور — خذ وقتك)</div>
+    <div class="say">«قيّمنا النظام على كل الاستعلامات العشرة آلاف بمقاييس IR القياسية: MAP و Precision@10 و Recall و nDCG@10، وكلها مكتوبة يدوياً. النتائج تؤكّد الترتيب المتوقّع: TF-IDF < BM25 < Embeddings ≈ الهجين.»</div>
+
+    <div class="label">🖥️ خطوات العرض العملي</div>
+    <ol>
+      <li>افتح <code>notebooks/evaluation.ipynb</code> وأظهر السطر الذي يطبع <b>NUMBER OF QUERIES USED = 10000</b> — أكّد أن التقييم على <b>كل</b> الاستعلامات لا عيّنة.
+        <span class="how">🔧 <b>كيف:</b> سكربت التقييم يحمّل كل qrels المجموعة ويُقيّم كل استعلام موجود فيها، ويُخزّن <code>num_queries</code> في تقرير JSON تحت <code>reports/</code>.</span></li>
+      <li>في الواجهة افتح تبويب <b>Evaluation</b>، اكتب الوسم <code>baseline</code> واضغط <b>Load report</b>: تظهر «Number of queries used: 10000» مع جدول ورسم أعمدة.
+        <span class="how">🔧 <b>كيف:</b> الواجهة تقرأ <code>reports/eval_quora_baseline.json</code> الذي أنتجه <code>scripts/evaluate.py</code> مسبقاً (نتائج محفوظة فتُعرض فوراً بلا إعادة حساب).</span></li>
+    </ol>
+    <table>
+      <tr><th>الطريقة</th><th>MAP</th><th>P@10</th><th>nDCG@10</th><th>Recall@1000</th></tr>
+      <tr><td>TF-IDF</td><td>0.681</td><td>0.111</td><td>0.723</td><td>0.954</td></tr>
+      <tr><td>BM25</td><td>0.718</td><td>0.116</td><td>0.760</td><td>0.963</td></tr>
+      <tr><td>Embeddings</td><td>0.777</td><td>0.125</td><td>0.815</td><td>0.984</td></tr>
+      <tr><td>Hybrid — Serial</td><td>0.777</td><td>0.125</td><td><b>0.816</b></td><td>0.963</td></tr>
+      <tr><td>Hybrid — Parallel</td><td>0.763</td><td>0.124</td><td>0.805</td><td><b>0.988</b></td></tr>
+    </table>
+    <ol start="3">
+      <li>اشرح <b>استباقياً</b> أن P@10 المنخفض (~0.12) ليس خطأً: لكل استعلام في Quora 1–2 وثيقة صلة فقط، فالحد الأعلى النظري لـ P@10 منخفض أصلاً.</li>
+      <li>اعرض مقارنة «قبل/بعد الميزة الإضافية»: اكتب الوسم <code>with_features</code> في تبويب Evaluation واضغط Load report:
+        <ul>
+          <li>Embeddings بدون تجميع: MAP <b>0.777</b> / Recall@1000 <b>0.984</b></li>
+          <li>Embeddings + Clustering: MAP <b>0.651</b> / Recall@1000 <b>0.792</b> — مقايضة سرعة/توسّع مقابل دقة.</li>
+        </ul>
+        <span class="how">🔧 <b>كيف:</b> شغّلنا التقييم مرتين على نفس الاستعلامات: مرة ببحث Embeddings كامل، ومرة ببحث مقيّد بأقرب عنقود؛ والفرق يُظهر أثر ميزة التجميع كمياً.</span></li>
+      <li>(اختياري) اختبار استعلام مفرد بخدمتك: <code>http://127.0.0.1:8004/docs</code> ← <code>POST /evaluate_query</code> بالجسم:
+        <span class="cmd">{ "dataset":"quora", "method":"bm25", "query_id":"<أي معرّف من qrels>" }</span>
+        تُرجع AP و P@10 و nDCG@10 و Recall@100 لذلك الاستعلام. (<code>GET /report</code> يعيد التقرير الكامل.)</li>
+    </ol>
+
+    <div class="label">📄 ملفاتك</div>
+    <ul>
+      <li><code>src/irsys/evaluation/metrics.py</code> — MAP / P@k / Recall / nDCG مكتوبة يدوياً</li>
+      <li><code>scripts/evaluate.py</code> · <code>notebooks/evaluation.ipynb</code> · الرسومات في <code>reports/</code></li>
+      <li><code>services/evaluation_service.py</code> (منفذ 8004)</li>
+    </ul>
+
+    <div class="qa">
+      <p><span class="q">س: كيف يُحسب MAP؟</span><br><span class="a">ج: لكل استعلام نحسب متوسط الدقة (AP) عند كل موضع فيه وثيقة صلة، ثم نأخذ متوسط هذه القيم على كل الاستعلامات.</span></p>
+      <p><span class="q">س: الفرق بين Precision و nDCG؟</span><br><span class="a">ج: Precision@10 لا تهتم بترتيب العشرة، أما nDCG فتكافئ وضع الأكثر صلة في مواضع أعلى (حساسة للترتيب).</span></p>
+      <p><span class="q">س: لماذا Recall التسلسلي أقل من التفرّعي؟</span><br><span class="a">ج: لأن التسلسلي محدود بمرشّحي BM25، بينما التفرّعي يوحّد مرشّحي النموذجين فيغطّي وثائق أكثر.</span></p>
+    </div>
+  </div>
+
+  <!-- ================= MEMBER 5 ================= -->
+  <h2 class="section" id="m5">عضو 5 — معتز الحلاق</h2>
+  <div class="card member">
+    <h3><span class="num">5</span> معتز الحلاق</h3>
+    <div class="role">المسؤولية: الميزات الإضافية (Clustering / Topics / RAG + خدمة RAG) + التقرير + واجهة Streamlit</div>
+
+    <div class="label">🗣️ ماذا تقول (الختام — أنت من يُبرز الإضافات)</div>
+    <div class="say">«فريقنا 5 أعضاء والمطلوب ميزتان إضافيتان، لكننا حقّقنا أربعاً وكلٌّ قابلة للاختبار وحدها: مخزن المتجهات FAISS، تجميع الوثائق، كشف المواضيع، والمحادثة المعتمدة على الاسترجاع RAG — كلّها داخل واجهة Streamlit واحدة.»</div>
+
+    <div class="label">🖥️ خطوات العرض العملي</div>
+    <ol>
+      <li><b>تجميع الوثائق (Clustering):</b> في تبويب Search بدّل مفتاح <code>Execution mode</code> من <b>Basic only</b> إلى <b>Basic + extra (clustering)</b> وأعد البحث؛ يصبح البحث مقيّداً بأقرب عنقود. اعرض الرسومات <code>reports/clusters_quora_sizes.png</code> و<code>clusters_quora_scatter.png</code>.
+        <span class="how">🔧 <b>كيف نفّذناها</b> (<code>features/clustering.py</code>): جمّعنا متجهات الوثائق إلى <b>25 عنقوداً</b> بخوارزمية MiniBatchKMeans؛ وعند البحث نأخذ أقرب عنقود/عناقيد لمتجه الاستعلام ونبحث داخله فقط. الرسوم: أحجام العناقيد ومخطط مبعثر بإسقاط PCA لبُعدين.</span></li>
+      <li><b>كشف المواضيع (Topic Detection):</b> اعرض <code>reports/topics_quora_words.png</code> وأمثلة المواضيع المكتشفة فعلاً:
+        <ul>
+          <li>موضوع: <code>learn, language, programming, english, java, python</code></li>
+          <li>موضوع: <code>india, pakistan, country, indian, china</code></li>
+          <li>موضوع: <code>make, money, online, earn, app</code></li>
+        </ul>
+        <span class="how">🔧 <b>كيف نفّذناها</b> (<code>features/topics.py</code>): طبّقنا تحليل <b>NMF</b> فوق مصفوفة TF-IDF الجاهزة (دون إعادة حساب) فتفكّكها إلى 15 موضوعاً، ونعرض أعلى كلمات كل موضوع.</span></li>
+      <li><b>RAG (المحادثة):</b> انتقل لتبويب <b>RAG chat</b> واسأل سؤالاً يوجد جوابه في المجموعة، مثل: <code>What is the best way to learn python?</code> ثم افتح قسم <code>Sources</code>.
+        <span class="how">🔧 <b>كيف نفّذناها</b> (<code>features/rag.py</code>): نسترجع أعلى 5 وثائق بالمحرك الهجين، نبنّي منها سياقاً (Prompt) موجَّهاً، ثم يولّد نموذج لغوي <b>محلي</b> (Qwen2.5-1.5B-Instruct) على الـ GPU إجابة معتمدة على السياق، مع إظهار المصادر بمعرّفاتها.</span>
+        <div class="note" style="margin-top:8px">⚠️ أول استدعاء قد يأخذ ~40 ثانية لتحميل النموذج. سخّنه قبل العرض. النموذج محلي ومخزّن داخل المشروع فيعمل أوفلاين بالكامل.</div></li>
+      <li>(اختياري) اختبار خدمة RAG وحدها: <code>http://127.0.0.1:8005/docs</code> ← <code>POST /chat</code> بالجسم:
+        <span class="cmd">{ "dataset":"quora", "query":"best way to learn python", "top_k":5 }</span></li>
+      <li><b>جولة الواجهة الختامية:</b> أظهر أن كل ما سبق مجموع في واجهة واحدة: اختيار المجموعة، مفتاح Backend (Direct/Gateway)، اختيار الطريقة، ضبط k1/b، نمط الهجين والدمج، مفتاح الميزة الإضافية، وتبويبات Search / Evaluation / RAG chat.
+        <span class="how">🔧 <b>كيف نفّذناها</b> (<code>ui/app.py</code>): واجهة Streamlit تدعم وضعَي Direct و Gateway، وتعرض النتائج بالنص الأصلي والمعرّف والدرجة.</span></li>
+    </ol>
+
+    <div class="label">📄 ملفاتك</div>
+    <ul>
+      <li><code>src/irsys/features/clustering.py</code> · <code>features/topics.py</code> · <code>features/rag.py</code></li>
+      <li><code>services/rag_service.py</code> (منفذ 8005) · <code>ui/app.py</code> · <code>reports/REPORT_AR.md</code></li>
+    </ul>
+
+    <div class="qa">
+      <p><span class="q">س: لماذا انخفض الأداء مع التجميع؟</span><br><span class="a">ج: تقييد البحث بأقرب عنقود قد يستبعد وثائق صلة خارجه، لكنه يقلّص فضاء البحث لنحو 1/25 — مقايضة سرعة/قابلية توسّع مقابل دقة، وهذا بالضبط ما نُظهره في تجربة «قبل/بعد».</span></p>
+      <p><span class="q">س: هل RAG يخترع الإجابات (هلوسة)؟</span><br><span class="a">ج: نوجّه النموذج بأن يجيب من المقاطع المسترجَعة فقط ويستشهد بأرقامها، ويقول «لا أملك معلومات كافية» إن لم يجدها — لذلك نعرض المصادر دائماً.</span></p>
+      <p><span class="q">س: لماذا Silhouette منخفض (~0.017)؟</span><br><span class="a">ج: طبيعي لتمثيلات نصية عالية الأبعاد على أسئلة قصيرة؛ العناقيد متداخلة لكنها تبقى مفيدة لتقليص فضاء البحث.</span></p>
+    </div>
+  </div>
+
+  <!-- ================= CLOSING ================= -->
+  <h2 class="section">✅ نصائح ختامية للجميع</h2>
+  <div class="card">
+    <ul>
+      <li><b>كل عضو يعرف ملفاته:</b> الدكتور قد يطلب فتح أي ملف وشرح سطر — راجع ملفاتك المذكورة في قسمك.</li>
+      <li><b>الانتقال السلس:</b> اختم فقرتك بجملة تسلّم للتالي، مثل: «الآن بعد أن مثّلنا الوثائق، يشرح طارق التمثيل الدلالي».</li>
+      <li><b>إن تعطّلت الشبكة/الخدمات:</b> بدّل مفتاح Backend في الواجهة إلى <b>Direct</b> — يُحمّل المحرك داخل العملية ويعمل أوفلاين بالكامل.</li>
+      <li><b>لإثبات استقلالية أي خدمة:</b> افتح <code>http://127.0.0.1:&lt;port&gt;/docs</code> (8000 بوابة، 8001 retrieval، 8002 preprocessing، 8003 refinement، 8004 evaluation، 8005 rag).</li>
+      <li><b>أرقام يحفظها الجميع:</b> 522,931 وثيقة • 10,000 استعلام • أفضل MAP ≈ 0.777 • 25 عنقوداً • 15 موضوعاً • 4 ميزات إضافية • 6 خدمات SOA.</li>
+      <li><b>الجميع يحضر</b> التسليم، وكل ميزة إضافية <b>قابلة للاختبار وحدها</b> عند الطلب.</li>
+    </ul>
+  </div>
+
+  <footer>
+    دليل عرض داخلي — مشروع نظام استرجاع المعلومات 2026 • مبني على الكود الفعلي للمشروع
+  </footer>
+
+</div>
+</body>
+</html>
