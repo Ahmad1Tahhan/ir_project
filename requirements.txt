@@ -1,0 +1,37 @@
+# ---------------------------------------------------------------------------
+# IR System project — Python 3.13
+#
+# NOTE: install GPU torch FIRST from the CUDA index (not from PyPI):
+#   pip install torch --index-url https://download.pytorch.org/whl/cu124
+# then:  pip install -r requirements.txt
+# ---------------------------------------------------------------------------
+
+# Core numeric / data
+numpy>=2.1
+scipy>=1.13
+pandas>=2.2
+scikit-learn>=1.5
+
+# Datasets (BEIR / Quora etc.)
+ir_datasets>=0.5.9
+
+# Representations
+sentence-transformers>=3.0      # embeddings (uses GPU torch)
+transformers>=4.44
+accelerate>=0.30                 # device_map for the local RAG LLM
+faiss-cpu>=1.9                   # vector store (ANN search)
+
+# Text preprocessing
+nltk>=3.9
+
+# SOA services + UI
+fastapi>=0.115
+uvicorn[standard]>=0.30
+requests>=2.32
+pydantic>=2.8
+streamlit>=1.38
+
+# Charts / reporting
+matplotlib>=3.9
+plotly>=5.23
+tqdm>=4.66

@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.ipynb_checkpoints/
+
+# Project data & build artifacts (large; rebuilt via scripts)
+data/raw/
+data/artifacts/
+*.faiss
+*.npy
+*.pkl
+*.joblib
+
+# Models cache
+models/
+.cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Scratch
+_pdf_text.txt
+notes.txt
+*.log
